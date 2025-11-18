@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Alma Therapy – Equilibrio desde el interior</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      /* ============================================
+         🎨 COLORES DORADOS BRILLANTES
+         ============================================ */
+      --bg-primary: #f9f3e9;
+      --bg-card: #fffbf5;
+      --bg-accent: #fdf5e6;
+      --accent: #e6b87d;
+      --accent-dark: #d4a574;
+      --accent-gold: #f0c288;
+      --text-main: #3a3024;
+      --text-soft: #6b5d4f;
+      --shadow-soft: 0 20px 50px rgba(214, 169, 109, 0.2);
+      --radius-lg: 28px;
+      --radius-md: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background: linear-gradient(135deg, #f9f3e9 0%, #f5ecd9 50%, #f0e5cc 100%);
+      line-height: 1.6;
+    }
+
+    .page-overlay {
+      min-height: 100vh;
+    }
+
+    .wrapper {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px 24px 80px;
+    }
+
+    /* Top Navigation Bar */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 30px;
+      border-radius: 999px;
+      background: rgba(255, 251, 245, 0.95);
+      box-shadow: 0 10px 30px rgba(214, 169, 109, 0.15);
+      backdrop-filter: blur(10px);
+      margin-bottom: 35px;
+      position: sticky;
+      top: 20px;
+      z-index: 100;
+      border: 1px solid rgba(230, 184, 125, 0.2);
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-circle {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f0c288, #e6b87d, #d4a574);
+      box-shadow: 0 4px 16px rgba(230, 184, 125, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Playfair Display", serif;
+      font-size: 26px;
+      font-weight: 600;
+      color: white;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      letter-spacing: 1px;
+    }
+
+    .top-center-text {
+      flex: 1;
+      text-align: center;
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: var(--text-soft);
+      font-style: italic;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-pill {
+      border: none;
+      border-radius: 999px;
+      padding: 12px 26px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #f0c288, #e6b87d);
+      color: white;
+      box-shadow: 0 6px 20px rgba(230, 184, 125, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(230, 184, 125, 0.5);
+      background: linear-gradient(135deg, #f5cc94, #ecc088);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--accent);
+      color: var(--accent-dark);
+    }
+
+    .btn-outline:hover {
+      background: rgba(230, 184, 125, 0.1);
+      border-color: var(--accent-dark);
+    }
+
+    /* Card Section */
+    .card-section {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 60px 70px;
+      margin-bottom: 45px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-section::before {
+      content: "";
+      position: absolute;
+      inset: -100%;
+      background: radial-gradient(circle at 10% 10%, rgba(255,255,255,0.5) 0%, transparent 50%),
+                  radial-gradient(circle at 90% 90%, rgba(240, 194, 136, 0.2) 0%, transparent 60%);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .card-section-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    h1, h2, h3 {
+      font-family: "Playfair Display", serif;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    /* Hero Section */
+    .hero {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 4vw, 4.5rem);
+      margin-bottom: 30px;
+      letter-spacing: 3px;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .hero-subtitle {
+      font-size: 1.75rem;
+      margin-bottom: 25px;
+      font-weight: 400;
+      color: var(--accent-dark);
+    }
+
+    .hero-text {
+      max-width: 650px;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: var(--text-soft);
+    }
+
+    .hero-image-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hero-image {
+      width: 100%;
+      max-width: 450px;
+      aspect-ratio: 3 / 4;
+      border-radius: 250px 250px 20px 20px;
+      background: linear-gradient(135deg, rgba(230, 184, 125, 0.1), rgba(212, 165, 116, 0.05)),
+                  url('hero.jpg');
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 30px 60px rgba(214, 169, 109, 0.3);
+      position: relative;
+    }
+
+    .hero-image::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2) 0%, transparent 70%);
+      border-radius: inherit;
+    }
+
+    /* Services */
+    .section-title {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      color: var(--text-main);
+    }
+
+    .section-intro {
+      margin-bottom: 40px;
+      font-size: 1.05rem;
+      color: var(--text-soft);
+      line-height: 1.7;
+    }
+
+    .section-intro strong {
+      font-weight: 600;
+      color: var(--accent-dark);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .service-card {
+      background: white;
+      border-radius: var(--radius-md);
+      padding: 28px 26px;
+      box-shadow: 0 8px 20px rgba(214, 169, 109, 0.12);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(230, 184, 125, 0.2);
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(214, 169, 109, 0.2);
+      border-color: var(--accent);
+    }
+
+    .service-badge {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #fdf5e6, #f5ecd9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 12px rgba(230, 184, 125, 0.25);
+    }
+
+    .service-title {
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .service-text {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: var(--text-soft);
+    }
+
+    .services-images {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 30px;
+    }
+
+    .services-image {
+      border-radius: var(--radius-md);
+      aspect-ratio: 4 / 3;
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 15px 35px rgba(214, 169, 109, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .services-image::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(230, 184, 125, 0.08), transparent);
+    }
+
+    .services-image.spa-1 {
+      background-image: url('spa1.jpg');
+    }
+
+    .services-image.spa-2 {
+      background-image: url('spa2.jpg');
+    }
+
+    /* Two Column Layout */
+    .two-column {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 50px;
+      align-items: flex-start;
+    }
+
+    .subheading {
+      font-size: 1.35rem;
+      margin-top: 30px;
+      margin-bottom: 12px;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .two-column p {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      margin-bottom: 15px;
+    }
+
+    .two-column strong {
+      color: var(--accent-dark);
+      font-weight: 600;
+    }
+
+    /* Reservation Box */
+    .reservation-box {
+      background: var(--bg-accent);
+      border-radius: var(--radius-md);
+      padding: 35px 32px;
+      box-shadow: 0 15px 40px rgba(214, 169, 109, 0.2);
+      border: 2px solid rgba(230, 184, 125, 0.3);
+      position: sticky;
+      top: 120px;
+    }
+
+    .reservation-box h3 {
+      font-size: 1.4rem;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-main);
+    }
+
+    .reservation-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      background: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .reservation-box p {
+      font-size: 1rem;
+      margin-bottom: 22px;
+      line-height: 1.7;
+    }
+
+    .reservation-box .btn-primary {
+      width: 100%;
+      padding: 14px 24px;
+      font-size: 1rem;
+    }
+
+    .reservation-box small {
+      display: block;
+      margin-top: 14px;
+      font-size: 0.85rem;
+      color: var(--text-soft);
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* About Section */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 50px;
+      align-items: center;
+      margin-top: 50px;
+    }
+
+    .about-image {
+      border-radius: var(--radius-md);
+      aspect-ratio: 3 / 4;
+      background: linear-gradient(135deg, rgba(230, 184, 125, 0.1), rgba(212, 165, 116, 0.05)),
+                  url('about.jpg');
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 20px 45px rgba(214, 169, 109, 0.25);
+    }
+
+    .about-text p {
+      margin-bottom: 18px;
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--text-soft);
+    }
+
+    /* Testimonials */
+    .testimonials-title {
+      font-size: 2rem;
+      margin-bottom: 35px;
+      color: var(--text-main);
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .testimonials-grid.bottom {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .testimonial-card {
+      background: white;
+      border-radius: 16px;
+      padding: 28px 26px;
+      position: relative;
+      box-shadow: 0 8px 24px rgba(214, 169, 109, 0.15);
+      border-left: 4px solid var(--accent);
+      transition: all 0.3s ease;
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(214, 169, 109, 0.2);
+    }
+
+    .quote-mark {
+      position: absolute;
+      top: 12px;
+      left: 18px;
+      font-size: 2.5rem;
+      color: rgba(230, 184, 125, 0.4);
+      font-family: Georgia, serif;
+      line-height: 1;
+    }
+
+    .testimonial-text {
+      font-size: 0.95rem;
+      margin-top: 20px;
+      margin-bottom: 14px;
+      color: var(--text-soft);
+      font-style: italic;
+      line-height: 1.7;
+    }
+
+    .testimonial-author {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--accent-dark);
+    }
+
+    .testimonial-author::before {
+      content: "— ";
+    }
+
+    /* Contact Section */
+    .contact-title {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      margin-top: 50px;
+      color: var(--text-main);
+    }
+
+    .contact-intro {
+      font-size: 1.05rem;
+      margin-bottom: 40px;
+      max-width: 800px;
+      line-height: 1.8;
+      color: var(--text-soft);
+    }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 40px;
+      align-items: flex-start;
+    }
+
+    .contact-block h4 {
+      font-family: "Playfair Display", serif;
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    .contact-block p {
+      font-size: 1rem;
+      margin-bottom: 14px;
+      line-height: 1.6;
+    }
+
+    .contact-label {
+      font-weight: 600;
+      color: var(--accent-dark);
+    }
+
+    .contact-block a {
+      color: var(--text-soft);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .contact-block a:hover {
+      color: var(--accent-dark);
+    }
+
+    /* Form */
+    .form-card {
+      background: var(--bg-accent);
+      border-radius: var(--radius-md);
+      padding: 35px 32px;
+      box-shadow: 0 15px 40px rgba(214, 169, 109, 0.2);
+      border: 2px solid rgba(230, 184, 125, 0.3);
+    }
+
+    .form-card h3 {
+      font-size: 1.4rem;
+      margin-bottom: 25px;
+      color: var(--text-main);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      margin-bottom: 6px;
+      font-weight: 500;
+      color: var(--text-main);
+      font-size: 0.95rem;
+    }
+
+    .form-input,
+    .form-textarea {
+      border-radius: 10px;
+      border: 2px solid rgba(230, 184, 125, 0.3);
+      padding: 12px 16px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+      background: white;
+      resize: vertical;
+      transition: all 0.3s ease;
+    }
+
+    .form-textarea {
+      min-height: 100px;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(230, 184, 125, 0.15);
+    }
+
+    .btn-submit {
+      width: 100%;
+      margin-top: 12px;
+      background: linear-gradient(135deg, #f0c288, #e6b87d);
+      color: white;
+      border-radius: 999px;
+      border: none;
+      padding: 14px 24px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+      box-shadow: 0 8px 24px rgba(230, 184, 125, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(230, 184, 125, 0.5);
+    }
+
+    /* Footer */
+    .footer-badge {
+      margin-top: 50px;
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid rgba(230, 184, 125, 0.2);
+    }
+
+    .footer-badge-text {
+      display: inline-block;
+      background: #1a3d5c;
+      color: white;
+      padding: 10px 24px;
+      border-radius: 25px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* ============================================
+       💬 WIDGET DE CHAT
+       ============================================ */
+    #chat-widget {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+    }
+
+    .chat-toggle {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f0c288, #e6b87d);
+      border: none;
+      box-shadow: 0 8px 24px rgba(230, 184, 125, 0.4);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .chat-toggle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 12px 32px rgba(230, 184, 125, 0.5);
+    }
+
+    .chat-box {
+      position: absolute;
+      bottom: 80px;
+      right: 0;
+      width: 380px;
+      height: 550px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .chat-header {
+      background: linear-gradient(135deg, #f0c288, #e6b87d);
+      color: white;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .chat-header-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chat-avatar {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .chat-header h4 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .chat-status {
+      margin: 0;
+      font-size: 13px;
+      opacity: 0.9;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background: #f9f9f9;
+    }
+
+    .chat-message {
+      margin-bottom: 16px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message-content {
+      display: inline-block;
+      padding: 12px 16px;
+      border-radius: 16px;
+      max-width: 80%;
+      word-wrap: break-word;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .bot-message .message-content {
+      background: white;
+      color: #3a3024;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .user-message {
+      text-align: right;
+    }
+
+    .user-message .message-content {
+      background: linear-gradient(135deg, #f0c288, #e6b87d);
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .chat-input-form {
+      display: flex;
+      gap: 10px;
+      padding: 16px;
+      background: white;
+      border-top: 1px solid #e8e8e8;
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid #e0e0e0;
+      border-radius: 24px;
+      font-size: 14px;
+      outline: none;
+      font-family: inherit;
+      transition: border-color 0.3s ease;
+    }
+
+    .chat-input:focus {
+      border-color: #e6b87d;
+    }
+
+    .chat-send-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f0c288, #e6b87d);
+      border: none;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .chat-send-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(230, 184, 125, 0.4);
+    }
+
+    .chat-send-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+      .card-section {
+        padding: 45px 40px;
+      }
+      
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      
+      .hero-image-wrapper {
+        order: -1;
+        margin-bottom: 30px;
+      }
+      
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .two-column,
+      .about-grid,
+      .contact-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .reservation-box {
+        position: static;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .wrapper {
+        padding: 15px 16px 50px;
+      }
+      
+      .top-bar {
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 15px 20px;
+      }
+      
+      .top-center-text {
+        display: none;
+      }
+      
+      .card-section {
+        padding: 35px 24px;
+        border-radius: 22px;
+      }
+      
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1.4rem;
+      }
+      
+      .services-grid,
+      .testimonials-grid,
+      .testimonials-grid.bottom,
+      .services-images {
+        grid-template-columns: 1fr;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .top-actions {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .chat-box {
+        width: calc(100vw - 48px);
+        height: calc(100vh - 100px);
+        bottom: 75px;
+        right: 0;
+        left: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-overlay">
+    <div class="wrapper">
+
+      <!-- Top Navigation -->
+      <header class="top-bar">
+        <div class="logo-area">
+          <div class="logo-circle">AT</div>
+        </div>
+        <div class="top-center-text">Santiago de Compostela · Masajes Terapéuticos</div>
+        <div class="top-actions">
+          <button class="btn-pill btn-outline" onclick="document.getElementById('reservas').scrollIntoView({behavior:'smooth'})">
+            Reservas
+          </button>
+          <button class="btn-pill btn-primary" onclick="document.getElementById('servicios').scrollIntoView({behavior:'smooth'})">
+            Servicios
+          </button>
+        </div>
+      </header>
+
+      <!-- Hero Section -->
+      <section class="card-section" id="inicio">
+        <div class="card-section-inner hero">
+          <div>
+            <h1 class="hero-title">ALMA THERAPY</h1>
+            <h2 class="hero-subtitle">Equilibrio desde el interior.</h2>
+            <p class="hero-text">
+              Centro de masajes terapéuticos y terapias manuales en Santiago de Compostela.
+              Un espacio donde la calma y la profesionalidad se encuentran para cuidar tu cuerpo con cercanía y naturalidad.
+            </p>
+          </div>
+          <div class="hero-image-wrapper">
+            <div class="hero-image"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Services Section -->
+      <section class="card-section" id="servicios">
+        <div class="card-section-inner">
+          <h2 class="section-title">Nuestros servicios terapéuticos</h2>
+          <p class="section-intro">
+            Cada sesión está diseñada para restaurar el equilibrio de tu cuerpo. Todos nuestros tratamientos tienen una duración de
+            <strong>1 hora</strong> y un precio de <strong>25€</strong>.
+          </p>
+
+          <div class="services-grid">
+            <article class="service-card">
+              <div class="service-badge">🧘‍♀️</div>
+              <h3 class="service-title">Masaje terapéutico</h3>
+              <p class="service-text">
+                Técnica profunda para aliviar tensiones musculares crónicas, mejorando la movilidad y reduciendo el dolor mediante
+                presiones específicas adaptadas a cada necesidad.
+              </p>
+            </article>
+
+            <article class="service-card">
+              <div class="service-badge">💆‍♀️</div>
+              <h3 class="service-title">Masaje descontracturante</h3>
+              <p class="service-text">
+                Especializado en zonas de sobrecarga muscular. Combina amasamiento y fricción para liberar contracturas,
+                restaurando la flexibilidad natural del tejido.
+              </p>
+            </article>
+
+            <article class="service-card">
+              <div class="service-badge">🔥</div>
+              <h3 class="service-title">Masaje con ventosas</h3>
+              <p class="service-text">
+                Terapia milenaria que estimula la circulación sanguínea y linfática, ayudando a eliminar toxinas,
+                reducir adherencias y mejorar la recuperación muscular profunda.
+              </p>
+            </article>
+
+            <article class="service-card">
+              <div class="service-badge">🌋</div>
+              <h3 class="service-title">Masaje con piedras calientes</h3>
+              <p class="service-text">
+                El calor terapéutico de las piedras volcánicas relaja la musculatura profunda, dilata los vasos sanguíneos y genera
+                un estado de relajación completa del sistema nervioso.
+              </p>
+            </article>
+
+            <article class="service-card">
+              <div class="service-badge">👣</div>
+              <h3 class="service-title">Reflexología podal</h3>
+              <p class="service-text">
+                Estimulación de puntos reflejos que conectan con órganos y sistemas del cuerpo. Equilibra la energía,
+                alivia tensiones y mejora la vitalidad general.
+              </p>
+            </article>
+
+            <article class="service-card">
+              <div class="service-badge">💫</div>
+              <h3 class="service-title">Masaje craneofacial</h3>
+              <p class="service-text">
+                Técnica especializada que libera la tensión acumulada en cabeza, cuello y rostro. Ideal para migrañas,
+                bruxismo y estrés emocional. Profundamente relajante.
+              </p>
+            </article>
+          </div>
+
+          <div class="services-images">
+            <div class="services-image spa-1"></div>
+            <div class="services-image spa-2"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Reservations Section -->
+      <section class="card-section" id="reservas">
+        <div class="card-section-inner">
+          <div class="two-column">
+            <div>
+              <h2 class="section-title">Reservas y disponibilidad</h2>
+
+              <h3 class="subheading">Horario de atención</h3>
+              <p>
+                Estamos disponibles de <strong>lunes a viernes</strong> en horario de <strong>10:00 a 20:00 horas</strong>.
+                Los fines de semana el centro permanece cerrado para garantizar la máxima atención personalizada durante la semana.
+              </p>
+
+              <h3 class="subheading">Forma de pago</h3>
+              <p>
+                El pago se realiza al finalizar cada sesión. Aceptamos <strong>efectivo</strong> y <strong>Bizum</strong> para tu comodidad.
+              </p>
+
+              <h3 class="subheading">Política de cancelación</h3>
+              <p>
+                Comprendemos que surgen imprevistos. Puedes cancelar tu cita sin coste alguno con más de
+                <strong>24 horas de antelación</strong>.
+              </p>
+            </div>
+
+            <aside class="reservation-box">
+              <h3>
+                <span class="reservation-icon">✓</span>
+                Reserva tu sesión
+              </h3>
+              <p>
+                Cada tratamiento está pensado para ti. Contacta para consultar disponibilidad y encontrar el
+                momento perfecto para tu cuidado.
+              </p>
+              <button class="btn-primary" onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">
+                Reservar ahora
+              </button>
+              <small>Respuesta en menos de 24h</small>
+            </aside>
+          </div>
+
+          <div class="about-grid">
+            <div class="about-image"></div>
+            <div class="about-text">
+              <h2 class="section-title">Sobre ALMA THERAPY</h2>
+              <p>
+                Soy terapeuta especializada en terapias manuales con formación técnica y un enfoque profundamente natural.
+                Mi pasión es el bienestar integral de cada persona que confía en mis manos.
+              </p>
+              <p>
+                Trabajo con personas que experimentan tensión muscular, estrés acumulado y dolor crónico, ofreciendo un trato
+                cercano y profesional. Cada sesión es única, adaptada a las necesidades específicas de tu cuerpo.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Testimonials & Contact Section -->
+      <section class="card-section">
+        <div class="card-section-inner">
+          <h2 class="testimonials-title">Lo que dicen quienes confían en nosotros</h2>
+
+          <div class="testimonials-grid">
+            <article class="testimonial-card">
+              <span class="quote-mark">"</span>
+              <p class="testimonial-text">
+                Llevo meses viniendo y he notado una mejora increíble en mis dolores cervicales.
+                El trato es excepcional y el ambiente muy relajante.
+              </p>
+              <p class="testimonial-author">Carmen, 42 años</p>
+            </article>
+
+            <article class="testimonial-card">
+              <span class="quote-mark">"</span>
+              <p class="testimonial-text">
+                Profesionalidad absoluta. El masaje descontracturante me ha ayudado muchísimo con las contracturas de la espalda por trabajo de oficina.
+              </p>
+              <p class="testimonial-author">Miguel, 38 años</p>
+            </article>
+
+            <article class="testimonial-card">
+              <span class="quote-mark">"</span>
+              <p class="testimonial-text">
+                Un espacio de calma en medio de la ciudad. Las piedras calientes son mi tratamiento favorito.
+                Salgo renovada cada vez.
+              </p>
+              <p class="testimonial-author">Laura, 51 años</p>
+            </article>
+          </div>
+
+          <div class="testimonials-grid bottom">
+            <article class="testimonial-card">
+              <span class="quote-mark">"</span>
+              <p class="testimonial-text">
+                El masaje craneofacial me ha cambiado la vida. Sufría migrañas constantes y ahora están controladas.
+                Totalmente recomendable.
+              </p>
+              <p class="testimonial-author">Javier, 45 años</p>
+            </article>
+
+            <article class="testimonial-card">
+              <span class="quote-mark">"</span>
+              <p class="testimonial-text">
+                Ambiente acogedor y manos expertas. La reflexología facial es una experiencia única que combina bienestar físico y mental.
+              </p>
+              <p class="testimonial-author">Rosa, 55 años</p>
+            </article>
+          </div>
+
+          <!-- Contact Section -->
+          <h2 class="contact-title" id="contacto">Estamos aquí para ti</h2>
+          <p class="contact-intro">
+            ¿Tienes alguna pregunta o necesitas más información sobre nuestros tratamientos?
+            Contacta con nosotros y te responderemos con la mayor brevedad posible. Tu bienestar es nuestra prioridad.
+          </p>
+
+          <div class="contact-layout">
+            <div class="contact-block">
+              <h4>Datos de contacto</h4>
+              <p>
+                <span class="contact-label">Ubicación:</span>
+                Santiago de Compostela
+              </p>
+              <p>
+                <span class="contact-label">Teléfono:</span>
+                <a href="tel:621028840">621 028 840</a>
+              </p>
+              <p>
+                <span class="contact-label">Email:</span>
+                <a href="/cdn-cgi/l/email-protection#48292629213b25273a292f2725082f25292124662b2725"><span class="__cf_email__" data-cfemail="066768676f756b69746761696b46616b676f6a2865696b">[email&#160;protected]</span></a>
+              </p>
+            </div>
+
+            <form class="form-card" onsubmit="event.preventDefault(); alert('Formulario enviado correctamente. Te contactaremos pronto.');">
+              <h3>Formulario de contacto</h3>
+              <div class="form-group">
+                <label for="nombre">Nombre completo</label>
+                <input id="nombre" type="text" class="form-input" required />
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input id="email" type="email" class="form-input" required />
+              </div>
+              <div class="form-group">
+                <label for="telefono">Teléfono</label>
+                <input id="telefono" type="tel" class="form-input" required />
+              </div>
+              <div class="form-group">
+                <label for="mensaje">Mensaje o consulta</label>
+                <textarea id="mensaje" class="form-textarea" required></textarea>
+              </div>
+              <button type="submit" class="btn-submit">Enviar mensaje</button>
+            </form>
+          </div>
+
+          <div class="footer-badge">
+            <span class="footer-badge-text">Made with GAMMA</span>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Widget de Chat -->
+  <div id="chat-widget">
+    <button id="chat-toggle" class="chat-toggle">
+      <svg id="chat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+      </svg>
+      <svg id="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <div id="chat-box" class="chat-box" style="display: none;">
+      <div class="chat-header">
+        <div class="chat-header-info">
+          <div class="chat-avatar">AT</div>
+          <div>
+            <h4>Alma Therapy</h4>
+            <p class="chat-status">Online</p>
+          </div>
+        </div>
+      </div>
+      
+      <div id="chat-messages" class="chat-messages">
+        <div class="chat-message bot-message">
+          <div class="message-content">
+            ¡Hola! 👋 Soy el asistente virtual de Alma Therapy. ¿En qué puedo ayudarte hoy?
+          </div>
+        </div>
+      </div>
+
+      <form id="chat-form" class="chat-input-form">
+        <input 
+          type="text" 
+          id="chat-input" 
+          class="chat-input" 
+          placeholder="Escribe tu mensaje..."
+          autocomplete="off"
+        />
+        <button type="submit" class="chat-send-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // ============================================
+    // 💬 CONFIGURACIÓN DEL CHAT PARA N8N
+    // ============================================
+    // 👇 CAMBIA ESTA URL POR TU WEBHOOK DE N8N
+    const N8N_WEBHOOK_URL = 'https://tu-n8n.com/webhook/alma-therapy-chat';
+
+    // Elementos del DOM
+    const chatToggle = document.getElementById('chat-toggle');
+    const chatBox = document.getElementById('chat-box');
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    const chatMessages = document.getElementById('chat-messages');
+    const chatIcon = document.getElementById('chat-icon');
+    const closeIcon = document.getElementById('close-icon');
+
+    // Toggle del chat
+    let chatOpen = false;
+    chatToggle.addEventListener('click', () => {
+      chatOpen = !chatOpen;
+      chatBox.style.display = chatOpen ? 'flex' : 'none';
+      chatIcon.style.display = chatOpen ? 'none' : 'block';
+      closeIcon.style.display = chatOpen ? 'block' : 'none';
+      
+      if (chatOpen) {
+        chatInput.focus();
+      }
+    });
+
+    // Función para agregar mensaje al chat
+    function addMessage(content, isUser = false) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `chat-message ${isUser ? 'user-message' : 'bot-message'}`;
+      messageDiv.innerHTML = `<div class="message-content">${content}</div>`;
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Enviar mensaje a n8n
+    chatForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const message = chatInput.value.trim();
+      if (!message) return;
+
+      // Mostrar mensaje del usuario
+      addMessage(message, true);
+      chatInput.value = '';
+
+      // Deshabilitar input mientras se procesa
+      chatInput.disabled = true;
+      const sendBtn = chatForm.querySelector('.chat-send-btn');
+      sendBtn.disabled = true;
+      
+      try {
+        // Llamada a n8n webhook
+        const response = await fetch(N8N_WEBHOOK_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: message,
+            timestamp: new Date().toISOString(),
+            source: 'alma-therapy-web',
+            userAgent: navigator.userAgent
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Error en la respuesta del servidor');
+        }
+
+        const data = await response.json();
+        
+        // Mostrar respuesta del bot
+        // n8n puede devolver la respuesta en diferentes formatos:
+        // - data.response
+        // - data.message
+        // - data.output
+        const botResponse = data.response || data.message || data.output || 
+                           '¡Gracias por tu mensaje! Te responderemos pronto.';
+        
+        setTimeout(() => {
+          addMessage(botResponse, false);
+        }, 500);
+        
+      } catch (error) {
+        console.error('Error al enviar mensaje:', error);
+        addMessage('Lo siento, hubo un error al procesar tu 
