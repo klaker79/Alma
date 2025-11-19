@@ -1210,11 +1210,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const chatIcon     = document.getElementById('chat-icon');
   const closeIcon    = document.getElementById('close-icon');
 
-  // Comprobación básica
-  if (!chatToggle || !chatBox || !chatForm || !chatInput || !chatMessages || !chatIcon || !closeIcon) {
-    console.warn('Chat widget: faltan elementos en el DOM.');
-    return;
+  // Comprobación avanzada para saber qué elemento falta
+const elements = {
+  chatToggle,
+  chatBox,
+  chatForm,
+  chatInput,
+  chatMessages,
+  chatIcon,
+  closeIcon
+};
+
+for (const [name, el] of Object.entries(elements)) {
+  if (!el) {
+    console.warn(`⚠️ Falta el elemento en el DOM: ${name}`);
   }
+}
+
+if (Object.values(elements).includes(null)) {
+  console.error('❌ Chat widget: faltan elementos en el DOM. No se puede iniciar.');
+  return;
+}
+
 
   // Toggle del chat
   let chatOpen = false;
