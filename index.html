@@ -1289,11 +1289,10 @@ if (Object.values(elements).includes(null)) {
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 
- // Enviar mensaje a n8n
+// ==== ENVIAR MENSAJE A N8N ====
 chatForm.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  // Crear o recuperar sessionId único
   let sessionId = localStorage.getItem("alma_session_id");
   if (!sessionId) {
     sessionId = "sess_" + Math.random().toString(36).substring(2);
@@ -1312,28 +1311,27 @@ chatForm.addEventListener('submit', async (e) => {
   try {
     const response = await fetch(N8N_WEBHOOK_URL, {
       method: 'POST',
-         headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      message,
-      sessionId,
-      timestamp: new Date().toISOString(),
-      source: 'alma-therapy-web',
-    }),
-  });
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message,
+        sessionId,
+        timestamp: new Date().toISOString(),
+        source: 'alma-therapy-web',
+      }),
+    });
 
-  // Leer SIEMPRE como texto
-  const text = await response.text();
-  addMessage(text, false);
+    // SIEMPRE texto (porque n8n devuelve texto simple)
+    const text = await response.text();
+    addMessage(text, false);
 
-} catch (error) {
-  console.error('Error al enviar mensaje:', error);
-  addMessage('Lo siento, hubo un error al procesar tu mensaje.', false);
-}
+  } catch (error) {
+    console.error('Error al enviar mensaje:', error);
+    addMessage('Lo siento, hubo un error al procesar tu mensaje.', false);
+  }
 
-chatInput.disabled = false;
-sendBtn.disabled = false;
-
-});
+  chatInput.disabled = false;
+  sendBtn.disabled = false;
+}); // <<-- ESTA SÍ, CERRANDO EL addEventListener
 
 // ==== ABRIR / CERRAR WIDGET DE CHAT ====
 const chatWidget = document.getElementById('chat-widget');
@@ -1343,11 +1341,9 @@ const chatBox = document.getElementById('chat-box');
 if (chatToggle && chatBox) {
   chatToggle.addEventListener('click', () => {
     const isHidden =
-      chatBox.style.display === 'none' || chatBox.style.display === '';
+      chatBox.style.display === 'none' ||
+      chatBox.style.display === '';
+
     chatBox.style.display = isHidden ? 'block' : 'none';
   });
 }
-</script>
-
-</body>
-</html>
