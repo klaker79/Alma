@@ -1311,40 +1311,33 @@ if (!sessionId) {
     const sendBtn = chatForm.querySelector('.chat-send-btn');
     sendBtn.disabled = true;
 
-    try {
-const response = await fetch(N8N_WEBHOOK_URL, {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    message,
-    sessionId,
-    timestamp: new Date().toISOString(),
-    source: 'alma-therapy-web',
-    userAgent: navigator.userAgent
-  })
-});
-
-      if (!response.ok) throw new Error('Error del servidor');
-
-      const data = await response.json();
-
-      const botResponse =
-        data.response ||
-        data.message  ||
-        data.output   ||
-        '¡Gracias por tu mensaje! Te responderemos pronto.';
-
-      setTimeout(() => addMessage(botResponse, false), 400);
-
-    } catch (error) {
-      console.error('Error al enviar mensaje:', error);
-      addMessage('Lo siento, hubo un error al procesar tu mensaje.', false);
-    }
-
-    chatInput.disabled = false;
-    sendBtn.disabled = false;
+   try {
+  const response = await fetch(N8N_WEBHOOK_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      message,
+      sessionId,
+      timestamp: new Date().toISOString(),
+      source: 'alma-therapy-web',
+    }),
   });
+
+  // Leemos la respuesta como TEXTO
+  const text = await response.text();
+  addMessage(text, false);
+
+} catch (error) {
+  console.error('Error al enviar mensaje:', error);
+  addMessage('Lo siento, hubo un error al procesar tu mensaje.', false);
+}
+
+// Rehabilitar input y botón
+chatInput.disabled = false;
+sendBtn.disabled = false;
+
 });
+
 </script>
 
 
