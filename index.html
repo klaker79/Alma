@@ -1191,44 +1191,10 @@
       </svg>
     </button>
 
-    <div id="chat-box" class="chat-box" style="display: none;">
-      <div class="chat-header">
-        <div class="chat-header-info">
-          <div class="chat-avatar">AT</div>
-          <div>
-            <h4>Alma Therapy</h4>
-            <p class="chat-status">Online</p>
-          </div>
         </div>
-      </div>
-      
-      <div id="chat-messages" class="chat-messages">
-        <div class="chat-message bot-message">
-          <div class="message-content">
-            ¡Hola! 👋 Soy el asistente virtual de Alma Therapy. ¿En qué puedo ayudarte hoy?
-          </div>
-        </div>
-      </div>
-
-      <form id="chat-form" class="chat-input-form">
-        <input 
-          type="text" 
-          id="chat-input" 
-          class="chat-input" 
-          placeholder="Escribe tu mensaje..."
-          autocomplete="off"
-        />
-        <button type="submit" class="chat-send-btn">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="22" y1="2" x2="11" y2="13"></line>
-            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-          </svg>
-        </button>
-      </form>
-    </div>
   </div>
 
-  
+  <script>
     // ============================================
     // 💬 CONFIGURACIÓN DEL CHAT PARA N8N
     // ============================================
@@ -1247,12 +1213,14 @@
     // Toggle del chat
     let chatOpen = false;
     chatToggle.addEventListener('click', () => {
+      if (!chatBox) return;
+
       chatOpen = !chatOpen;
       chatBox.style.display = chatOpen ? 'flex' : 'none';
       chatIcon.style.display = chatOpen ? 'none' : 'block';
       closeIcon.style.display = chatOpen ? 'block' : 'none';
-      
-      if (chatOpen) {
+
+      if (chatOpen && chatInput) {
         chatInput.focus();
       }
     });
@@ -1269,7 +1237,7 @@
     // Enviar mensaje a n8n
     chatForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+
       const message = chatInput.value.trim();
       if (!message) return;
 
@@ -1281,40 +1249,40 @@
       chatInput.disabled = true;
       const sendBtn = chatForm.querySelector('.chat-send-btn');
       sendBtn.disabled = true;
-      
+
       try {
-        // Llamada a n8n webhook
         const response = await fetch(N8N_WEBHOOK_URL, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            message: message,
+            message,
             timestamp: new Date().toISOString(),
             source: 'alma-therapy-web',
             userAgent: navigator.userAgent
           })
         });
 
-        if (!response.ok) {
-          throw new Error('Error en la respuesta del servidor');
-        }
+        if (!response.ok) throw new Error('Error del servidor');
 
         const data = await response.json();
-        
-        // Mostrar respuesta del bot
-        // n8n puede devolver la respuesta en diferentes formatos:
-        // - data.response
-        // - data.message
-        // - data.output
-        const botResponse = data.response || data.message || data.output || 
-                           '¡Gracias por tu mensaje! Te responderemos pronto.';
-        
-        setTimeout(() => {
-          addMessage(botResponse, false);
-        }, 500);
-        
+
+        const botResponse =
+          data.response ||
+          data.message ||
+          data.output ||
+          '¡Gracias por tu mensaje! Te responderemos pronto.';
+
+        setTimeout(() => addMessage(botResponse, false), 400);
+
       } catch (error) {
         console.error('Error al enviar mensaje:', error);
-        addMessage('Lo siento, hubo un error al procesar tu 
+        addMessage('Lo siento, hubo un error al procesar tu mensaje.', false);
+      }
+
+      chatInput.disabled = false;
+      sendBtn.disabled = false;
+    });
+  </script>
+
+</body>
+</html>
