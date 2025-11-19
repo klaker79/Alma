@@ -1230,92 +1230,75 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  // ============================================
-  // 💬 CONFIGURACIÓN DEL CHAT PARA N8N
-  // ============================================
- const N8N_WEBHOOK_URL = "https://n8nanais.mindloop.cloud/webhook/alma_therapy";
 
- // ==== ELEMENTOS DEL DOM ====
-const chatToggle   = document.getElementById('chat-toggle');
-const chatBox      = document.getElementById('chat-box');
-const chatForm     = document.getElementById('chat-form');
-const chatInput    = document.getElementById('chat-input');
-const chatMessages = document.getElementById('chat-messages');
-const chatIcon     = document.getElementById('chat-icon');
-const closeIcon    = document.getElementById('close-icon');
-const sendBtn      = document.querySelector('.chat-send-btn'); 
+  const N8N_WEBHOOK_URL = "https://n8nanais.mindloop.cloud/webhook/alma_therapy";
 
-// Validación de elementos
-const elements = { chatToggle, chatBox, chatForm, chatInput, chatMessages, chatIcon, closeIcon, sendBtn };
-for (const [name, el] of Object.entries(elements)) {
-  if (!el) console.warn(`⚠️ Falta el elemento en el DOM: ${name}`);
-}
-if (Object.values(elements).includes(null)) {
-  console.error('❌ Chat widget: faltan elementos en el DOM. No se puede iniciar.');
-  return;
-}
+  const chatToggle   = document.getElementById('chat-toggle');
+  const chatBox      = document.getElementById('chat-box');
+  const chatForm     = document.getElementById('chat-form');
+  const chatInput    = document.getElementById('chat-input');
+  const chatMessages = document.getElementById('chat-messages');
+  const chatIcon     = document.getElementById('chat-icon');
+  const closeIcon    = document.getElementById('close-icon');
+  const sendBtn      = document.querySelector('.chat-send-btn');
 
-// ==== TOGGLE DEL CHAT ====
-let chatOpen = false;
+  let chatOpen = false;
 
-chatToggle.addEventListener('click', () => {
-  chatOpen = !chatOpen;
+  chatToggle.addEventListener('click', () => {
+    chatOpen = !chatOpen;
+    chatBox.style.display = chatOpen ? 'flex' : 'none';
+    chatIcon.style.display = chatOpen ? 'none' : 'block';
+    closeIcon.style.display = chatOpen ? 'block' : 'none';
+    if (chatOpen) chatInput.focus();
+  });
 
-  chatBox.style.display   = chatOpen ? 'flex'  : 'none';
-  chatIcon.style.display  = chatOpen ? 'none'  : 'block';
-  closeIcon.style.display = chatOpen ? 'block' : 'none';
-
-  if (chatOpen) chatInput.focus();
-});
-
-// ==== FUNCIÓN PARA AGREGAR MENSAJES ====
-function addMessage(content, isUser = false) {
-  const messageDiv = document.createElement('div');
-  messageDiv.className = `chat-message ${isUser ? 'user-message' : 'bot-message'}`;
-  messageDiv.innerHTML = `<div class="message-content">${content}</div>`;
-  chatMessages.appendChild(messageDiv);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-// ==== ENVIAR MENSAJE A N8N ====
-chatForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  let sessionId = localStorage.getItem("alma_session_id");
-  if (!sessionId) {
-    sessionId = "sess_" + Math.random().toString(36).substring(2);
-    localStorage.setItem("alma_session_id", sessionId);
+  function addMessage(content, isUser = false) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${isUser ? 'user-message' : 'bot-message'}`;
+    messageDiv.innerHTML = `<div class="message-content">${content}</div>`;
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 
-  const message = chatInput.value.trim();
-  if (!message) return;
+  chatForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-  addMessage(message, true);
-  chatInput.value = '';
+    let sessionId = localStorage.getItem("alma_session_id");
+    if (!sessionId) {
+      sessionId = "sess_" + Math.random().toString(36).substring(2);
+      localStorage.setItem("alma_session_id", sessionId);
+    }
 
-  chatInput.disabled = true;
-  sendBtn.disabled = true;
+    const message = chatInput.value.trim();
+    if (!message) return;
 
-  try {
-    const response = await fetch(N8N_WEBHOOK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message,
-        sessionId,
-        timestamp: new Date().toISOString(),
-        source: 'alma-therapy-web',
-      }),
-    });
+    addMessage(message, true);
+    chatInput.value = '';
+    chatInput.disabled = true;
+    sendBtn.disabled = true;
 
-    const text = await response.text();
-    addMessage(text, false);
+    try {
+      const response = await fetch(N8N_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message,
+          sessionId,
+          timestamp: new Date().toISOString(),
+          source: 'alma-therapy-web',
+        }),
+      });
 
-  } catch (error) {
-    console.error('Error al enviar mensaje:', error);
-    addMessage('Lo siento, hubo un error al procesar tu mensaje.', false);
-  }
+      const text = await response.text();
+      addMessage(text, false);
 
-  chatInput.disabled = false;
-  sendBtn.disabled = false;
+    } catch (error) {
+      console.error('Error al enviar mensaje:', error);
+      addMessage('Lo siento, hubo un error al procesar tu mensaje.', false);
+    }
+
+    chatInput.disabled = false;
+    sendBtn.disabled = false;
+  });
+
 });
