@@ -1289,57 +1289,47 @@ if (Object.values(elements).includes(null)) {
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 
-  // Enviar mensaje a n8n
-  chatForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-// Crear o recuperar sessionId único para el usuario
-let sessionId = localStorage.getItem("alma_session_id");
-if (!sessionId) {
-  sessionId = "sess_" + Math.random().toString(36).substring(2);
-  localStorage.setItem("alma_session_id", sessionId);
-}
+ // Enviar mensaje a n8n
+chatForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
 
-    const message = chatInput.value.trim();
-    if (!message) return;
+  // Crear o recuperar sessionId único
+  let sessionId = localStorage.getItem("alma_session_id");
+  if (!sessionId) {
+    sessionId = "sess_" + Math.random().toString(36).substring(2);
+    localStorage.setItem("alma_session_id", sessionId);
+  }
 
-    // Mostrar mensaje del usuario
-    addMessage(message, true);
-    chatInput.value = '';
+  const message = chatInput.value.trim();
+  if (!message) return;
 
-    // Deshabilitar input mientras se procesa
-    chatInput.disabled = true;
-    const sendBtn = chatForm.querySelector('.chat-send-btn');
-    sendBtn.disabled = true;
+  addMessage(message, true);
+  chatInput.value = '';
 
-   try {
-  const response = await fetch(N8N_WEBHOOK_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      message,
-      sessionId,
-      timestamp: new Date().toISOString(),
-      source: 'alma-therapy-web',
-    }),
-  });
+  chatInput.disabled = true;
+  sendBtn.disabled = true;
 
-  // Leemos la respuesta como TEXTO
-  const text = await response.text();
-  addMessage(text, false);
+  try {
+    const response = await fetch(N8N_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message,
+        sessionId,
+        timestamp: new Date().toISOString(),
+        source: 'alma-therapy-web',
+      }),
+    });
 
-} catch (error) {
-  console.error('Error al enviar mensaje:', error);
-  addMessage('Lo siento, hubo un error al procesar tu mensaje.', false);
-}
+    // Leer SIEMPRE como texto
+    const text = await response.text();
+    addMessage(text, false);
 
-// Rehabilitar input y botón
-chatInput.disabled = false;
-sendBtn.disabled = false;
+  } catch (error) {
+    console.error('Error al enviar mensaje:', error);
+    addMessage('Lo siento, hubo un error al procesar tu mensaje.', false);
+  }
 
+  chatInput.disabled = false;
+  sendBtn.disabled = false;
 });
-
-</script>
-
-
-</body>
-</html>
