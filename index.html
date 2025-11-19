@@ -1231,7 +1231,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
 
-  const N8N_WEBHOOK_URL = "https://n8nanais.mindloop.cloud/webhook/alma_therapy";
+  const N8N_WEBHOOK_URL = 'https://n8nanais.mindloop.cloud/webhook/alma_therapy';
 
   const chatToggle   = document.getElementById('chat-toggle');
   const chatBox      = document.getElementById('chat-box');
@@ -1241,6 +1241,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const chatIcon     = document.getElementById('chat-icon');
   const closeIcon    = document.getElementById('close-icon');
   const sendBtn      = document.querySelector('.chat-send-btn');
+
+  if (!chatToggle || !chatBox || !chatForm || !chatInput || !chatMessages) {
+    console.error('❌ Elementos del chat no encontrados');
+    return;
+  }
+
+  console.log('✅ Chat inicializado correctamente');
 
   let chatOpen = false;
 
@@ -1255,7 +1262,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function addMessage(content, isUser = false) {
     const messageDiv = document.createElement('div');
     messageDiv.className = `chat-message ${isUser ? 'user-message' : 'bot-message'}`;
-    messageDiv.innerHTML = `<div class="message-content">${content}</div>`;
+    messageDiv.innerHTML = `<div class="message-content">${String(content).replace(/\n/g, '<br>')}</div>`;
     chatMessages.appendChild(messageDiv);
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
@@ -1263,11 +1270,16 @@ document.addEventListener('DOMContentLoaded', () => {
   chatForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    let sessionId = localStorage.getItem("alma_session_id");
-    if (!sessionId) {
-      sessionId = "sess_" + Math.random().toString(36).substring(2);
-      localStorage.setItem("alma_session_id", sessionId);
+    const SESSION_TTL_MIN = 60;
+    let sessionId = localStorage.getItem('alma_session_id');
+    let lastTs = parseInt(localStorage.getItem('alma_session_last') || '0', 10);
+    const nowTs = Date.now();
+    
+    if (!sessionId || !lastTs || (nowTs - lastTs) > SESSION_TTL_MIN * 60 * 1000) {
+      sessionId = `sess_alma_${nowTs}_${Math.random().toString(36).substring(2, 9)}`;
+      localStorage.setItem('alma_session_id', sessionId);
     }
+    localStorage.setItem('alma_session_last', String(nowTs));
 
     const message = chatInput.value.trim();
     if (!message) return;
@@ -1278,27 +1290,37 @@ document.addEventListener('DOMContentLoaded', () => {
     sendBtn.disabled = true;
 
     try {
+      console.log('📤 Enviando mensaje a n8n:', message);
+      
       const response = await fetch(N8N_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message,
-          sessionId,
-          timestamp: new Date().toISOString(),
-          source: 'alma-therapy-web',
-        }),
+          message: message,
+          sessionId: sessionId,
+          timestamp: new Date().toISOString()
+        })
       });
 
+      console.log('📥 Respuesta recibida:', response.status);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const text = await response.text();
-      addMessage(text, false);
+      console.log('💬 Texto respuesta:', text);
+      addMessage(text || 'Respuesta vacía del servidor', false);
 
     } catch (error) {
-      console.error('Error al enviar mensaje:', error);
-      addMessage('Lo siento, hubo un error al procesar tu mensaje.', false);
+      console.error('❌ Error al enviar mensaje:', error);
+      addMessage('Lo siento, hubo un error al conectar. Por favor, intenta de nuevo o contacta al 621 028 840.', false);
+    } finally {
+      chatInput.disabled = false;
+      sendBtn.disabled = false;
+      chatInput.focus();
     }
-
-    chatInput.disabled = false;
-    sendBtn.disabled = false;
   });
 
 });
+</script>
