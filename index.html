@@ -1194,95 +1194,101 @@
         </div>
   </div>
 
-  <script>
-    // ============================================
-    // 💬 CONFIGURACIÓN DEL CHAT PARA N8N
-    // ============================================
-    // 👇 CAMBIA ESTA URL POR TU WEBHOOK DE N8N
-    const N8N_WEBHOOK_URL = 'https://n8nanais.mindloop.cloud/webhook/alma_therapy';
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // ============================================
+  // 💬 CONFIGURACIÓN DEL CHAT PARA N8N
+  // ============================================
+  const N8N_WEBHOOK_URL = 'https://n8nanais.mindloop.cloud/webhook/alma_therapy';
 
-    // Elementos del DOM
-    const chatToggle = document.getElementById('chat-toggle');
-    const chatBox = document.getElementById('chat-box');
-    const chatForm = document.getElementById('chat-form');
-    const chatInput = document.getElementById('chat-input');
-    const chatMessages = document.getElementById('chat-messages');
-    const chatIcon = document.getElementById('chat-icon');
-    const closeIcon = document.getElementById('close-icon');
+  // Elementos del DOM
+  const chatToggle   = document.getElementById('chat-toggle');
+  const chatBox      = document.getElementById('chat-box');
+  const chatForm     = document.getElementById('chat-form');
+  const chatInput    = document.getElementById('chat-input');
+  const chatMessages = document.getElementById('chat-messages');
+  const chatIcon     = document.getElementById('chat-icon');
+  const closeIcon    = document.getElementById('close-icon');
 
-    // Toggle del chat
-    let chatOpen = false;
-    chatToggle.addEventListener('click', () => {
-      if (!chatBox) return;
+  // Comprobación básica
+  if (!chatToggle || !chatBox || !chatForm || !chatInput || !chatMessages || !chatIcon || !closeIcon) {
+    console.warn('Chat widget: faltan elementos en el DOM.');
+    return;
+  }
 
-      chatOpen = !chatOpen;
-      chatBox.style.display = chatOpen ? 'flex' : 'none';
-      chatIcon.style.display = chatOpen ? 'none' : 'block';
-      closeIcon.style.display = chatOpen ? 'block' : 'none';
+  // Toggle del chat
+  let chatOpen = false;
+  chatToggle.addEventListener('click', () => {
+    chatOpen = !chatOpen;
+    chatBox.style.display   = chatOpen ? 'flex'  : 'none';
+    chatIcon.style.display  = chatOpen ? 'none'  : 'block';
+    closeIcon.style.display = chatOpen ? 'block' : 'none';
 
-      if (chatOpen && chatInput) {
-        chatInput.focus();
-      }
-    });
+    if (chatOpen) {
+      chatInput.focus();
+    }
+  });
 
-    // Función para agregar mensaje al chat
-    function addMessage(content, isUser = false) {
-      const messageDiv = document.createElement('div');
-      messageDiv.className = `chat-message ${isUser ? 'user-message' : 'bot-message'}`;
-      messageDiv.innerHTML = `<div class="message-content">${content}</div>`;
-      chatMessages.appendChild(messageDiv);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
+  // Función para agregar mensaje al chat
+  function addMessage(content, isUser = false) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${isUser ? 'user-message' : 'bot-message'}`;
+    messageDiv.innerHTML = `<div class="message-content">${content}</div>`;
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  // Enviar mensaje a n8n
+  chatForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const message = chatInput.value.trim();
+    if (!message) return;
+
+    // Mostrar mensaje del usuario
+    addMessage(message, true);
+    chatInput.value = '';
+
+    // Deshabilitar input mientras se procesa
+    chatInput.disabled = true;
+    const sendBtn = chatForm.querySelector('.chat-send-btn');
+    sendBtn.disabled = true;
+
+    try {
+      const response = await fetch(N8N_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message,
+          timestamp: new Date().toISOString(),
+          source: 'alma-therapy-web',
+          userAgent: navigator.userAgent
+        })
+      });
+
+      if (!response.ok) throw new Error('Error del servidor');
+
+      const data = await response.json();
+
+      const botResponse =
+        data.response ||
+        data.message  ||
+        data.output   ||
+        '¡Gracias por tu mensaje! Te responderemos pronto.';
+
+      setTimeout(() => addMessage(botResponse, false), 400);
+
+    } catch (error) {
+      console.error('Error al enviar mensaje:', error);
+      addMessage('Lo siento, hubo un error al procesar tu mensaje.', false);
     }
 
-    // Enviar mensaje a n8n
-    chatForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
+    chatInput.disabled = false;
+    sendBtn.disabled = false;
+  });
+});
+</script>
 
-      const message = chatInput.value.trim();
-      if (!message) return;
-
-      // Mostrar mensaje del usuario
-      addMessage(message, true);
-      chatInput.value = '';
-
-      // Deshabilitar input mientras se procesa
-      chatInput.disabled = true;
-      const sendBtn = chatForm.querySelector('.chat-send-btn');
-      sendBtn.disabled = true;
-
-      try {
-        const response = await fetch(N8N_WEBHOOK_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            message,
-            timestamp: new Date().toISOString(),
-            source: 'alma-therapy-web',
-            userAgent: navigator.userAgent
-          })
-        });
-
-        if (!response.ok) throw new Error('Error del servidor');
-
-        const data = await response.json();
-
-        const botResponse =
-          data.response ||
-          data.message ||
-          data.output ||
-          '¡Gracias por tu mensaje! Te responderemos pronto.';
-
-        setTimeout(() => addMessage(botResponse, false), 400);
-
-      } catch (error) {
-        console.error('Error al enviar mensaje:', error);
-        addMessage('Lo siento, hubo un error al procesar tu mensaje.', false);
-      }
-
-      chatInput.disabled = false;
-      sendBtn.disabled = false;
-    });
-  </script>
 
 </body>
 </html>
