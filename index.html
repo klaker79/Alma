@@ -1292,6 +1292,12 @@ if (Object.values(elements).includes(null)) {
   // Enviar mensaje a n8n
   chatForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+// Crear o recuperar sessionId único para el usuario
+let sessionId = localStorage.getItem("alma_session_id");
+if (!sessionId) {
+  sessionId = "sess_" + Math.random().toString(36).substring(2);
+  localStorage.setItem("alma_session_id", sessionId);
+}
 
     const message = chatInput.value.trim();
     if (!message) return;
@@ -1306,16 +1312,17 @@ if (Object.values(elements).includes(null)) {
     sendBtn.disabled = true;
 
     try {
-      const response = await fetch(N8N_WEBHOOK_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message,
-          timestamp: new Date().toISOString(),
-          source: 'alma-therapy-web',
-          userAgent: navigator.userAgent
-        })
-      });
+const response = await fetch(N8N_WEBHOOK_URL, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    message,
+    sessionId,
+    timestamp: new Date().toISOString(),
+    source: 'alma-therapy-web',
+    userAgent: navigator.userAgent
+  })
+});
 
       if (!response.ok) throw new Error('Error del servidor');
 
